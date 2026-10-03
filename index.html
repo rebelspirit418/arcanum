@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Arcanum Julian — калькулятор «Круг 22» по юлианской дате и ведическая астрология D1–D1000.">
+<meta name="robots" content="index,follow">
+<meta name="referrer" content="no-referrer">
+<title>Arcanum Julian</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2218%22 fill=%22%23000%22/%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22none%22 stroke=%22%23e3122d%22 stroke-width=%222%22/%3E%3Cg fill=%22none%22 stroke=%22%23e3122d%22 stroke-width=%221.6%22 stroke-linejoin=%22round%22 opacity=%22.95%22%3E%3Cpolygon points=%2250.00%2C10.00 15.36%2C70.00 84.64%2C70.00%22/%3E%3Cpolygon points=%2238.21%2C11.78 22.79%2C79.32 89.00%2C58.90%22/%3E%3Cpolygon points=%2227.47%2C16.95 32.64%2C86.04 89.89%2C47.01%22/%3E%3Cpolygon points=%2218.73%2C25.06 44.04%2C89.55 87.23%2C35.39%22/%3E%3Cpolygon points=%2212.77%2C35.39 55.96%2C89.55 81.27%2C25.06%22/%3E%3Cpolygon points=%2210.11%2C47.01 67.36%2C86.04 72.53%2C16.95%22/%3E%3Cpolygon points=%2211.00%2C58.90 77.21%2C79.32 61.79%2C11.78%22/%3E%3C/g%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%227%22 fill=%22%23e3122d%22/%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%222.6%22 fill=%22%23000%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000;--panel:#050505;--line:#1a1a1a;--line2:#2a2a2a;
+  --gold:#8a8a8a;--gold2:#2a2a2a;--saffron:#e3122d;--red:#e3122d;--red2:#7a0a19;
+  --text:#ececec;--muted:#808080;--ice:#d6d6d6;
+  --disp:"Bank Gothic","BankGothic Md BT","BankGothic Lt BT","Jura","Eurostile",sans-serif;--body:"Manrope","Segoe UI",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#000;background-image:radial-gradient(ellipse 80% 40% at 50% 0,rgba(227,18,45,.10),transparent 70%);
+  color:var(--text);font-family:var(--body);font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--red)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+header{border-bottom:1px solid var(--line)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;flex-wrap:wrap}
+.om{color:var(--muted);letter-spacing:5px;font-size:11px;font-family:var(--disp);font-weight:500}
+.lang button{background:transparent;color:var(--muted);border:1px solid var(--line2);font:400 12px var(--disp);padding:6px 12px;cursor:pointer;letter-spacing:1px;border-radius:2px}
+.lang button.on{background:var(--red);color:#fff;border-color:var(--red)}
+.logo{text-align:center;padding:26px 0 28px}
+.logo h1{margin:0;font-family:var(--disp);font-weight:500;font-size:clamp(26px,5.4vw,54px);letter-spacing:2px;text-transform:uppercase;color:#fff;
+  text-shadow:0 0 30px rgba(227,18,45,.45)}
+.logo h1::after{content:"";display:block;width:80px;height:2px;background:var(--red);margin:16px auto 0}
+.logo .sub{color:var(--muted);letter-spacing:6px;text-transform:uppercase;font-size:clamp(10px,2vw,13px);margin-top:14px;font-family:var(--disp);font-weight:500}
+.ticker{background:#000;color:var(--red);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:7px 0;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-family:var(--disp);font-weight:500}
+section{margin:22px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:0 0 20px;position:relative}
+.box::before{content:"";position:absolute;left:0;top:0;width:3px;height:52px;background:var(--red)}
+.ttl{margin:0 0 18px;font-family:var(--disp);font-weight:400;color:#fff;text-transform:uppercase;letter-spacing:3px;font-size:clamp(13px,2.2vw,16px);padding:18px 22px 14px;border-bottom:1px solid var(--line)}
+.in{padding:0 22px}
+.form{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.form label{display:flex;flex-direction:column;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;gap:6px;font-family:var(--disp);font-weight:500}
+.form select,.form input{background:#000;color:#fff;border:1px solid var(--line2);font:400 18px var(--disp);padding:9px 10px;min-width:80px;border-radius:2px;outline:none}
+.form select:focus,.form input:focus{border-color:var(--red)}
+.form input{width:110px}
+.btn{background:var(--red);color:#fff;border:1px solid var(--red);font:400 14px var(--disp);text-transform:uppercase;letter-spacing:3px;padding:13px 28px;cursor:pointer;border-radius:2px;transition:.2s}
+.btn:hover{background:#000;color:var(--red);box-shadow:0 0 20px rgba(227,18,45,.4)}
+.conv{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:15px}
+.conv .d{border:1px solid var(--line2);background:#000;padding:8px 14px;border-radius:2px;font-family:var(--disp);font-weight:500}
+.conv .j{border-color:var(--red);color:#fff;box-shadow:0 0 18px rgba(227,18,45,.25)}
+.err{color:var(--red);margin-top:10px}
+.base{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.base div{border:1px solid var(--line);padding:6px 12px;background:#000;color:var(--muted);font-family:var(--disp);font-weight:500;font-size:13px;border-radius:2px}
+.base b{color:#fff;font-size:17px;font-weight:400}
+.wheelwrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:820px){.wheelwrap{grid-template-columns:1fr}}
+svg{width:100%;height:auto;display:block}
+.chk{width:100%;border-collapse:collapse}
+.chk td{padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13.5px}
+.ball{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;font-weight:400;color:#fff;font-size:14px;flex:none;font-family:var(--disp)}
+.cname{font-weight:400;text-transform:uppercase;letter-spacing:1.5px;font-size:12px;font-family:var(--disp)}
+.small{color:var(--muted);font-size:12.5px}
+.load{display:grid;gap:10px}
+.load .row{display:grid;grid-template-columns:160px 1fr 30px;gap:12px;align-items:center;font-size:14px}
+.load b{font-weight:400;font-family:var(--disp)}
+.bar{height:6px;background:#141414;border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:3px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.card{background:#000;border:1px solid var(--line);border-left:2px solid var(--red);padding:12px 14px;border-radius:2px}
+.card .h{display:flex;gap:12px;align-items:center}
+.card .pn{color:var(--muted);font-size:11px;letter-spacing:1px;font-family:var(--disp);font-weight:500}
+.card .nm{font-size:14px;text-transform:uppercase;font-family:var(--disp);font-weight:400;letter-spacing:1px;margin-top:2px}
+.card .fx{color:var(--muted);font-size:11px;font-family:Consolas,monospace}
+.card .tcm{margin-top:8px;font-size:13.5px}
+.tag{display:inline-block;border:1px solid var(--line2);padding:2px 8px;margin:2px 4px 2px 0;font-size:11px;color:var(--ice);background:#0a0a0a;border-radius:2px}
+.card .mus{margin-top:8px;font-size:12px;color:var(--muted)}
+.card .soc{margin-top:8px;font-size:14px}.card .soc p{margin:4px 0}
+.shadow{color:#ff5a6e}
+details{border:1px solid var(--line);margin:6px 0;background:#000;border-radius:2px}
+summary{cursor:pointer;padding:9px 12px;display:flex;gap:12px;align-items:center;list-style:none;font-family:var(--disp);font-weight:500;font-size:13px;letter-spacing:.5px}
+summary::-webkit-details-marker{display:none}
+details[open] summary{background:linear-gradient(90deg,rgba(227,18,45,.12),transparent)}
+details .body{padding:4px 14px 12px 58px;font-size:14px}
+@media(max-width:600px){details .body{padding-left:14px}}
+.method ol{padding-left:22px}.method li{margin:8px 0}
+.warn{border:1px solid var(--red2);border-left:3px solid var(--red);padding:10px 14px;color:#ff8d9b;margin-top:14px;font-size:13.5px;background:rgba(227,18,45,.05)}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:26px 0 34px;text-align:center;color:var(--muted);font-size:12.5px}
+footer .c{color:#fff;letter-spacing:4px;text-transform:uppercase;font-family:var(--disp);font-weight:500;font-size:12px;margin-bottom:8px}
+.mc{background:#000;border:1px solid var(--line);padding:12px 14px;margin:10px 0;display:grid;grid-template-columns:auto 1fr;gap:14px;border-radius:2px}
+.mc .cn{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;font-family:var(--disp);font-weight:400}
+.mc p{margin:6px 0 0;font-size:14px}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.key{border:1px solid var(--line2);background:linear-gradient(160deg,#0e0e0e,#000 60%);padding:20px;border-radius:3px;border-top:2px solid var(--red)}
+.key .kh{display:flex;gap:16px;align-items:center}
+.key .big{width:60px;height:60px;font-size:24px}
+.key .kp{font-family:var(--disp);font-weight:500;color:var(--muted);letter-spacing:1.5px;font-size:11px}
+.key .kn{font-family:var(--disp);font-weight:400;font-size:19px;text-transform:uppercase;color:#fff;margin-top:2px}
+.key .kd{color:var(--muted);font-size:13px;margin:12px 0 0}
+.key p{margin:8px 0 0;font-size:14.5px}
+b{font-weight:600}
+.box{transition:border-color .25s}.box:hover{border-color:#2a2a2a}
+.card,.mc,details{transition:border-color .2s,transform .2s}.card:hover{border-color:#333;transform:translateY(-1px)}
+.logo h1{letter-spacing:6px;font-weight:400}
+.scroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.tabs{display:flex;gap:0;margin-top:22px;border-bottom:1px solid var(--line)}
+.tabs button{background:transparent;color:var(--muted);border:0;border-bottom:2px solid transparent;font:500 13px var(--disp);letter-spacing:2px;text-transform:uppercase;padding:12px 18px;cursor:pointer;margin-bottom:-1px}
+.tabs button.on{color:#fff;border-bottom-color:var(--red)}
+.tabs button:hover{color:#fff}
+.pair{display:flex;gap:4px}.pair select{min-width:60px;font-size:16px}
+.vform input[type=text]{font-size:17px}
+.charts2{display:grid;grid-template-columns:1fr 1fr;gap:20px}@media(max-width:760px){.charts2{grid-template-columns:1fr}}
+.csel{display:flex;gap:8px;margin-bottom:10px}.csel select,.csel input{background:#000;color:#fff;border:1px solid var(--line2);font:500 13px var(--disp);padding:7px 8px;border-radius:2px}
+.csel select{flex:1;min-width:0}.csel input{width:84px;display:none}
+.nchart{max-width:460px;margin:0 auto;font-family:var(--disp)}
+.vt{width:100%;border-collapse:collapse;font-size:13.5px;white-space:nowrap}
+.vt th{font:500 11px var(--disp);letter-spacing:1px;color:var(--muted);text-transform:uppercase;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2)}
+.vt td{padding:8px 10px;border-bottom:1px solid var(--line)}
+.vt tr.as td{color:#ff8d9b}.vt tr:hover td{background:#0b0b0b}
+.vt .sg{font-family:var(--disp);color:#fff;margin-right:4px}.vt .dg{color:var(--muted);font-size:11px}
+#vvarg td,#vvarg th{text-align:center;padding:7px 8px}
+.mono{font-family:Consolas,"Courier New",monospace}
+.rr{color:var(--red);font-size:11px;font-weight:600}
+.vgroups{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.vgroups button{background:transparent;color:var(--muted);border:1px solid var(--line2);font:500 12px var(--disp);padding:7px 12px;cursor:pointer;border-radius:2px;letter-spacing:1px}
+.vgroups button.on{background:var(--red);color:#fff;border-color:var(--red)}
+.ad{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--line);font-size:13.5px;flex-wrap:wrap}.ad.cur{color:#fff}.ad.cur span:first-child::before{content:"● ";color:var(--red)}
+.logo .mark{width:84px;height:84px;display:block;margin:0 auto 18px;filter:drop-shadow(0 0 18px rgba(227,18,45,.45))}
+.om{display:flex;align-items:center;gap:10px}.minimark svg{display:block}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap topbar">
+    <div class="om"><span class="minimark"><svg width="18" height="18" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="#e3122d" stroke-width="2"/><g fill="none" stroke="#e3122d" stroke-width="1.6" stroke-linejoin="round" opacity=".95"><polygon points="50.00,10.00 15.36,70.00 84.64,70.00"/><polygon points="38.21,11.78 22.79,79.32 89.00,58.90"/><polygon points="27.47,16.95 32.64,86.04 89.89,47.01"/><polygon points="18.73,25.06 44.04,89.55 87.23,35.39"/><polygon points="12.77,35.39 55.96,89.55 81.27,25.06"/><polygon points="10.11,47.01 67.36,86.04 72.53,16.95"/><polygon points="11.00,58.90 77.21,79.32 61.79,11.78"/></g><circle cx="50" cy="50" r="7" fill="#e3122d"/><circle cx="50" cy="50" r="2.6" fill="#000"/></svg></span>ARCANUM · JULIAN · 22</div>
+    <div class="lang"><button data-l="ru">RU</button> <button data-l="en">EN</button></div>
+  </div>
+  <div class="wrap logo">
+    <svg class="mark" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="#e3122d" stroke-width="2"/><g fill="none" stroke="#e3122d" stroke-width="1.6" stroke-linejoin="round" opacity=".95"><polygon points="50.00,10.00 15.36,70.00 84.64,70.00"/><polygon points="38.21,11.78 22.79,79.32 89.00,58.90"/><polygon points="27.47,16.95 32.64,86.04 89.89,47.01"/><polygon points="18.73,25.06 44.04,89.55 87.23,35.39"/><polygon points="12.77,35.39 55.96,89.55 81.27,25.06"/><polygon points="10.11,47.01 67.36,86.04 72.53,16.95"/><polygon points="11.00,58.90 77.21,79.32 61.79,11.78"/></g><circle cx="50" cy="50" r="7" fill="#e3122d"/><circle cx="50" cy="50" r="2.6" fill="#000"/></svg>
+    <h1 data-t="title"></h1>
+    <div class="sub" data-t="subtitle"></div>
+  </div>
+  <div class="ticker"><marquee scrollamount="5" data-t="ticker"></marquee></div>
+</header>
+
+<nav class="wrap tabs"><button data-tab="arc" class="on" data-t="tabArc"></button><button data-tab="ved" data-t="tabVed"></button></nav>
+<main class="wrap">
+<div id="tab-arc">
+  <section class="box">
+    <h2 class="ttl" data-t="inputTitle"></h2>
+    <div class="in">
+      <div class="form">
+        <label><span data-t="day"></span><select id="d"></select></label>
+        <label><span data-t="month"></span><select id="m"></select></label>
+        <label><span data-t="year"></span><input id="y" type="number" min="1600" max="2200" value="2000"></label>
+        <button class="btn" id="go" data-t="calc"></button>
+      </div>
+      <div id="err" class="err"></div>
+      <div class="conv" id="conv"></div>
+      <div class="base" id="base"></div>
+    </div>
+  </section>
+
+  <div id="out" hidden>
+    <section class="box">
+      <h2 class="ttl" data-t="wheelTitle"></h2>
+      <div class="in wheelwrap">
+        <div id="wheel"></div>
+        <div>
+          <table class="chk" id="chk"></table>
+          <p class="small" data-t="chakraNote"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2 class="ttl" data-t="loadTitle"></h2>
+      <div class="in"><div class="load" id="load"></div><p class="small" data-t="loadNote"></p></div>
+    </section>
+
+    <section class="box">
+      <h2 class="ttl" data-t="keyTitle"></h2>
+      <div class="in"><p class="small" data-t="keyNote"></p><div class="keys" id="keys"></div></div>
+    </section>
+
+    <section class="box">
+      <h2 class="ttl" data-t="posTitle"></h2>
+      <div class="in"><div class="cards" id="cards"></div></div>
+    </section>
+
+    <section class="box">
+      <h2 class="ttl" data-t="medTitle"></h2>
+      <div class="in"><p class="small" data-t="medNote"></p><div id="med"></div></div>
+    </section>
+  </div>
+
+  <section class="box">
+    <h2 class="ttl" data-t="refTitle"></h2>
+    <div class="in"><p class="small" data-t="refNote"></p><div id="ref"></div></div>
+  </section>
+
+  <section class="box method">
+    <h2 class="ttl" data-t="methodTitle"></h2>
+    <div class="in" id="method"></div>
+  </section>
+</div>
+<div id="tab-ved" hidden>
+  <section class="box">
+    <h2 class="ttl" data-v="vInTitle"></h2>
+    <div class="in">
+      <div class="form vform">
+        <label><span data-v="vCal"></span><select id="vcal"><option value="g"></option><option value="j"></option></select></label>
+        <label><span data-v="vDate"></span><input id="vdate" type="text" value="01.01.2000" placeholder="ДД.ММ.ГГГГ" style="width:150px"></label>
+        <label><span data-v="vTime"></span><input id="vtime" type="text" value="12:00:00" placeholder="ЧЧ:ММ:СС" style="width:130px"></label>
+        <label><span data-v="vTz"></span><input id="vtz" type="text" value="+0:00" style="width:100px"></label>
+        <label><span data-v="vLat"></span><span class="pair"><input id="vlatd" type="number" value="51" min="0" max="90" style="width:70px"><input id="vlatm" type="number" value="30" min="0" max="59" style="width:64px"><select id="vlats"><option>N</option><option>S</option></select></span></label>
+        <label><span data-v="vLon"></span><span class="pair"><input id="vlond" type="number" value="0" min="0" max="180" style="width:76px"><input id="vlonm" type="number" value="7" min="0" max="59" style="width:64px"><select id="vlons"><option>E</option><option selected>W</option></select></span></label>
+        <button class="btn" id="vgo" data-v="vCalc"></button>
+      </div>
+      <div id="verr" class="err"></div>
+      <div class="base" id="vbase"></div>
+    </div>
+  </section>
+
+  <div id="vout" hidden>
+    <section class="box">
+      <h2 class="ttl" data-v="vChartsTitle"></h2>
+      <div class="in">
+        <div class="charts2">
+          <div><div class="csel"><select id="vsel1"></select><input id="vcust1" type="number" min="1" max="1000" placeholder="Dn"></div><div id="vchart1"></div></div>
+          <div><div class="csel"><select id="vsel2"></select><input id="vcust2" type="number" min="1" max="1000" placeholder="Dn"></div><div id="vchart2"></div></div>
+        </div>
+        <p class="small" data-v="vChartNote"></p>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2 class="ttl" data-v="vPlTitle"></h2>
+      <div class="in scroll"><table class="vt" id="vtab"></table></div>
+    </section>
+
+    <section class="box">
+      <h2 class="ttl" data-v="vVargTitle"></h2>
+      <div class="in">
+        <div class="vgroups" id="vgroups"></div>
+        <div class="scroll"><table class="vt" id="vvarg"></table></div>
+        <p class="small" data-v="vVargNote"></p>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2 class="ttl" data-v="vDashaTitle"></h2>
+      <div class="in"><div id="vdasha"></div></div>
+    </section>
+
+    <section class="box method">
+      <h2 class="ttl" data-v="vMethodTitle"></h2>
+      <div class="in" id="vmethod"></div>
+    </section>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="c">Arcanum Julian · Круг 22</div>
+    <div id="copy"></div>
+  </div>
+</footer>
+
+<script>
+/* ===================== DATA ===================== */
+const ARC={
+ ru:["","Маг","Жрица","Императрица","Император","Жрец","Влюблённые","Колесница","Справедливость","Отшельник","Колесо Фортуны","Сила","Повешенный","Смерть","Умеренность","Дьявол","Башня","Звезда","Луна","Солнце","Суд","Мир","Дурак"],
+ en:["","Magician","High Priestess","Empress","Emperor","Hierophant","Lovers","Chariot","Justice","Hermit","Wheel of Fortune","Strength","Hanged Man","Death","Temperance","Devil","Tower","Star","Moon","Sun","Judgement","World","Fool"]
+};
+// elements
+const EL={
+ Z:{c:"#e6b800",ru:"Земля",en:"Earth",sys:{ru:"Желудок / Селезёнка",en:"Stomach / Spleen"},wave:{ru:"бета 13–30 Гц",en:"beta 13–30 Hz"},
+    mus:{ru:"лестничные, грудинно-подъязычные, подзатылочные, подъязычно-челюстные, надключичные стабилизаторы",en:"scalenes, sternohyoid, suboccipitals, mylohyoid, supraclavicular stabilisers"}},
+ M:{c:"#2e7bf0",ru:"Металл",en:"Metal",sys:{ru:"Лёгкие / Толстый кишечник",en:"Lungs / Large intestine"},wave:{ru:"альфа 8–13 Гц",en:"alpha 8–13 Hz"},
+    mus:{ru:"малые грудные, передняя дельта, грудино-рёберные соединения, подключичные, медиальный край лопатки",en:"pectoralis minor, anterior deltoid, sternocostal joints, subclavius, medial scapular border"}},
+ V:{c:"#e0303a",ru:"Вода",en:"Water",sys:{ru:"Почки / Мочевой пузырь",en:"Kidneys / Bladder"},wave:{ru:"дельта 0,5–4 Гц",en:"delta 0.5–4 Hz"},
+    mus:{ru:"пояснично-подвздошная, диафрагма, многораздельные, задняя часть таза, малоберцовые",en:"iliopsoas, diaphragm, multifidus, posterior pelvis, peroneals"}},
+ D:{c:"#2fb455",ru:"Дерево",en:"Wood",sys:{ru:"Печень / Желчный пузырь",en:"Liver / Gallbladder"},wave:{ru:"тета 4–8 Гц",en:"theta 4–8 Hz"},
+    mus:{ru:"приводящие бедра, тазовое дно, грушевидная, крестцово-подвздошная связка, малые ягодичные",en:"hip adductors, pelvic floor, piriformis, sacroiliac ligament, gluteus minimus"}},
+ O:{c:"#a24dd6",ru:"Огонь",en:"Fire",sys:{ru:"Сердце / Тонкий кишечник",en:"Heart / Small intestine"},wave:{ru:"гамма 30+ Гц",en:"gamma 30+ Hz"},
+    mus:{ru:"разгибатели спины, трапециевидная, подлопаточная, лопаточные стабилизаторы, ягодичные",en:"spinal erectors, trapezius, subscapularis, scapular stabilisers, glutes"}},
+ N:{c:"#ff7a1a",ru:"Ось",en:"Axis",sys:{ru:"Нервная / Гормональная система",en:"Nervous / Hormonal system"},wave:{ru:"регулятор всех ритмов",en:"regulator of all rhythms"},
+    mus:{ru:"межрёберные, подлопаточные, широчайшие, малая круглая, подмышечные фасции",en:"intercostals, subscapularis, latissimus, teres minor, axillary fascia"}}
+};
+// arcana -> element, organ, qi hours, TCM meaning
+const TCM={
+ 1:{e:"Z",o:{ru:"Желудок",en:"Stomach"},h:"7–9",ru:"Сильный «огонь желудка»: быстро усваивает пищу и информацию. Перекос — переедание, изжога, жизнь на бегу.",en:"Strong 'stomach fire': digests food and information fast. Imbalance — overeating, heartburn, living in a rush."},
+ 21:{e:"Z",o:{ru:"Желудок",en:"Stomach"},h:"7–9",ru:"Желудок как центр целостности: переваривает опыт до конца. Слабость — тяжесть после еды и застой, когда дела не завершены.",en:"Stomach as the centre of wholeness: digests experience to the end. Weakness — heaviness after meals and stagnation when things stay unfinished."},
+ 2:{e:"Z",o:{ru:"Селезёнка",en:"Spleen"},h:"9–11",ru:"Селезёнка накапливает и осмысляет. Избыток мыслей рождает «сырость»: отёки, тяга к сладкому, вялость.",en:"The spleen stores and reflects. Too much thinking breeds 'dampness': swelling, sugar cravings, sluggishness."},
+ 20:{e:"Z",o:{ru:"Селезёнка",en:"Spleen"},h:"9–11",ru:"Пробуждение через тело. Слабая селезёнка — усталость, падение мышечного тонуса, когда человек не слышит свой «зов».",en:"Awakening through the body. Weak spleen — fatigue and low muscle tone when the person ignores their 'call'."},
+ 3:{e:"M",o:{ru:"Лёгкие",en:"Lungs"},h:"3–5",ru:"Широкое дыхание и щедрость. Перекос — перегрузка кожи и дыхательных путей, привязанность к вещам.",en:"Wide breath and generosity. Imbalance — overloaded skin and airways, attachment to possessions."},
+ 19:{e:"M",o:{ru:"Лёгкие",en:"Lungs"},h:"3–5",ru:"Светлое дыхание, защитная ци (вэй-ци). Недостаток — сухость, грусть, частые простуды при подавленной радости.",en:"Bright breath, protective qi (wei qi). Deficiency — dryness, sadness, frequent colds when joy is suppressed."},
+ 4:{e:"M",o:{ru:"Толстый кишечник",en:"Large intestine"},h:"5–7",ru:"Контроль и удержание. Перекос — запоры, зажатые плечи, неумение отпускать.",en:"Control and holding. Imbalance — constipation, tight shoulders, inability to let go."},
+ 18:{e:"M",o:{ru:"Толстый кишечник",en:"Large intestine"},h:"5–7",ru:"Отпускание старого через страх. Сбитый ритм кишечника, кожные реакции, ночная тревога.",en:"Letting go of the old through fear. Disturbed bowel rhythm, skin reactions, night-time anxiety."},
+ 5:{e:"V",o:{ru:"Мочевой пузырь",en:"Bladder"},h:"15–17",ru:"Канал правил и традиций идёт вдоль всей спины. Избыток — напряжение спины, раздражение от несправедливости.",en:"The channel of rules and tradition runs along the whole back. Excess — back tension, irritation at injustice."},
+ 17:{e:"V",o:{ru:"Мочевой пузырь",en:"Bladder"},h:"15–17",ru:"Течение и надежда. Недостаток — холод в пояснице, частые позывы, страх будущего.",en:"Flow and hope. Deficiency — cold lower back, frequent urination, fear of the future."},
+ 6:{e:"V",o:{ru:"Почки",en:"Kidneys"},h:"17–19",ru:"Энергия выбора и сексуальности, цзин. Перекос — растрата сил через отношения и удовольствия.",en:"Energy of choice and sexuality, jing. Imbalance — draining strength through relationships and pleasure."},
+ 16:{e:"V",o:{ru:"Почки",en:"Kidneys"},h:"17–19",ru:"Удар по запасу цзин: шок и стресс разрушают резерв. Страх, поясница, уши, срыв на еду как реакция на стресс.",en:"A blow to the jing reserve: shock and stress burn it. Fear, lower back, ears, stress-eating."},
+ 7:{e:"D",o:{ru:"Желчный пузырь",en:"Gallbladder"},h:"23–1",ru:"Решимость и движение. Избыток — гнев, боль в висках, напряжение по бокам тела.",en:"Decisiveness and motion. Excess — anger, temple headaches, tension along the sides of the body."},
+ 15:{e:"D",o:{ru:"Желчный пузырь",en:"Gallbladder"},h:"23–1",ru:"Зависимые решения. Застой желчи, тяжесть справа, горечь во рту, неспособность выбрать.",en:"Dependent decisions. Bile stagnation, heaviness on the right, bitter taste, inability to choose."},
+ 8:{e:"D",o:{ru:"Печень",en:"Liver"},h:"1–3",ru:"Печень — «генерал»: порядок и контроль. Избыток — раздражение, натянутые сухожилия, давление.",en:"The liver is the 'general': order and control. Excess — irritability, tight tendons, blood pressure."},
+ 14:{e:"D",o:{ru:"Печень",en:"Liver"},h:"1–3",ru:"Плавный ток ци и крови. Недостаток — застой, сухость глаз, сбои циклов; лечится мерой.",en:"Smooth flow of qi and blood. Deficiency — stagnation, dry eyes, irregular cycles; healed by moderation."},
+ 9:{e:"O",o:{ru:"Сердце",en:"Heart"},h:"11–13",ru:"Дух-шэнь в уединении: ясный ум. Избыток — бессонница, сердцебиение от перегрузки мыслями.",en:"Shen spirit in solitude: a clear mind. Excess — insomnia, palpitations from mental overload."},
+ 13:{e:"O",o:{ru:"Сердце",en:"Heart"},h:"11–13",ru:"Трансформация через сердце. Недостаток — тоска, холодные руки, страх перемен.",en:"Transformation through the heart. Deficiency — longing, cold hands, fear of change."},
+ 10:{e:"O",o:{ru:"Тонкий кишечник",en:"Small intestine"},h:"13–15",ru:"Отделяет чистое от мутного; удача от верного выбора. Перекос — хаотичное пищеварение, рассеянность.",en:"Separates the pure from the turbid; luck from the right choice. Imbalance — erratic digestion, scattered mind."},
+ 12:{e:"O",o:{ru:"Тонкий кишечник",en:"Small intestine"},h:"13–15",ru:"Застой в сортировке: вздутие, неумение отделить нужное от ненужного, жертвенность.",en:"Stuck sorting: bloating, can't separate the useful from the useless, self-sacrifice."},
+ 11:{e:"N",o:{ru:"Тройной обогреватель (гормоны)",en:"Triple burner (hormones)"},h:"21–23",ru:"Ось гормонов: распределение тепла и жидкостей по трём обогревателям, баланс щитовидной железы, надпочечников и циклов.",en:"Hormonal axis: distributes heat and fluids through the three burners; balance of thyroid, adrenals and cycles."},
+ 22:{e:"N",o:{ru:"Перикард (нервная система)",en:"Pericardium (nervous system)"},h:"19–21",ru:"Ось нервной системы: защита сердца и адаптация. Нестабильность — тревога, перевозбуждение, вегетативные сбои.",en:"Nervous axis: protects the heart, adaptation. Instability — anxiety, overexcitement, autonomic swings."}
+};
+const SOC={1:{ru:"Инициатива, старт с нуля, слово и навыки, умение себя подать.",ruS:"Манипуляции, распыление, много начинаний без итога.",en:"Initiative, starting from scratch, words and skills, self-presentation.",enS:"Manipulation, scattering, many starts with no result."},2:{ru:"Интуиция, знания, тайна, умение слушать и чувствовать людей.",ruS:"Замкнутость, недосказанность, жизнь в своей голове.",en:"Intuition, knowledge, mystery, the ability to listen and read people.",enS:"Withdrawal, things left unsaid, living in your head."},3:{ru:"Изобилие, красота, забота, творчество, умение создавать уют и растить.",ruS:"Лень, расточительность, гиперопека.",en:"Abundance, beauty, care, creativity, making comfort and growing things.",enS:"Laziness, wastefulness, overprotection."},4:{ru:"Власть, структура, ответственность, лидерство, порядок.",ruS:"Тотальный контроль, жёсткость, давление на близких.",en:"Power, structure, responsibility, leadership, order.",enS:"Total control, rigidity, pressure on loved ones."},5:{ru:"Наставник, традиции, обучение, место в системе и сообществе.",ruS:"Догматизм, морализаторство, «я знаю, как правильно».",en:"Mentor, tradition, teaching, a place in a system and community.",enS:"Dogmatism, moralising, 'I know what's right'."},6:{ru:"Выбор, партнёрство, отношения, гармония через другого человека.",ruS:"Зависимость от чужого мнения, нерешительность, любовные треугольники.",en:"Choice, partnership, relationships, harmony through another person.",enS:"Dependence on others' opinions, indecision, love triangles."},7:{ru:"Движение, цель, победа, карьера, дорога и скорость.",ruS:"Агрессия, гонка без смысла, неумение остановиться.",en:"Movement, goals, victory, career, road and speed.",enS:"Aggression, racing without purpose, unable to stop."},8:{ru:"Закон, баланс, договоры, честность, причина и следствие.",ruS:"Осуждение, бюрократия, бесконечное «кто прав».",en:"Law, balance, contracts, honesty, cause and effect.",enS:"Judgement, bureaucracy, endless 'who is right'."},9:{ru:"Мудрость, мастерство, экспертность, глубина, своя мастерская.",ruS:"Изоляция, отстранённость, уход от людей.",en:"Wisdom, mastery, expertise, depth, your own workshop.",enS:"Isolation, detachment, withdrawing from people."},10:{ru:"Удача, циклы, поток, перемены, умение поймать момент.",ruS:"Пассивность, азарт, надежда на случай.",en:"Luck, cycles, flow, change, catching the moment.",enS:"Passivity, gambling, relying on chance."},11:{ru:"Энергия, смелость, выносливость, власть над страстями.",ruS:"Подавление, упрямство, сила через давление.",en:"Energy, courage, stamina, mastery over passions.",enS:"Suppression, stubbornness, strength through pressure."},12:{ru:"Иной взгляд, служение, пауза, жертва ради смысла.",ruS:"Жертвенность, застревание, роль мученика.",en:"A different view, service, pause, sacrifice for meaning.",enS:"Martyrdom, being stuck, playing the victim."},13:{ru:"Трансформация, обновление, умение закрывать старое.",ruS:"Страх перемен, разрушение ради разрушения.",en:"Transformation, renewal, the ability to close old chapters.",enS:"Fear of change, destruction for its own sake."},14:{ru:"Мера, гармония, терпение, исцеление, искусство соединять.",ruS:"Безволие, растянутость, «всё потом».",en:"Moderation, harmony, patience, healing, the art of blending.",enS:"Lack of will, procrastination, 'later'."},15:{ru:"Влияние, деньги, харизма, страсть, бизнес и сделки.",ruS:"Зависимости, манипуляции, жадность.",en:"Influence, money, charisma, passion, business and deals.",enS:"Addictions, manipulation, greed."},16:{ru:"Слом старого, прорыв, стройка заново, освобождение.",ruS:"Разрушение, гордыня, срывы под стрессом.",en:"Breaking the old, breakthrough, rebuilding, liberation.",enS:"Destruction, pride, breakdowns under stress."},17:{ru:"Талант, признание, вдохновение, надежда, публичность.",ruS:"Оторванность от реальности, тщеславие.",en:"Talent, recognition, inspiration, hope, public life.",enS:"Detachment from reality, vanity."},18:{ru:"Воображение, интуиция, творчество, работа с тайным и скрытым.",ruS:"Иллюзии, страхи, мутные схемы.",en:"Imagination, intuition, creativity, working with the hidden.",enS:"Illusions, fears, shady schemes."},19:{ru:"Успех, радость, теплота, лидерство, слава.",ruS:"Эгоцентризм, выгорание, жизнь напоказ.",en:"Success, joy, warmth, leadership, fame.",enS:"Egocentrism, burnout, living for show."},20:{ru:"Род, семья, призвание, возрождение, голос поколений.",ruS:"Обиды на род, осуждение, глухота к своему зову.",en:"Family line, vocation, rebirth, the voice of generations.",enS:"Grudges against family, judgement, deaf to your calling."},21:{ru:"Масштаб, свобода, мир, путешествия, завершённость.",ruS:"Неудовлетворённость, побег, «мне всего мало».",en:"Scale, freedom, the world, travel, completion.",enS:"Dissatisfaction, escape, 'never enough'."},22:{ru:"Свобода, лёгкость, спонтанность, новое начало.",ruS:"Безответственность, хаос, инфантильность.",en:"Freedom, lightness, spontaneity, a new beginning.",enS:"Irresponsibility, chaos, immaturity."}};
+// 9-cycle meaning groups (place / occupation)
+const GRP={
+ ru:["","центр города, студия, минимализм — своё дело, руководство, стартап","тихий район, у воды, дом с историей — исследования, психология, архив","дом с садом, кухня, зона отдыха — творчество, декор, кулинария","квартира с чёткой планировкой — администрирование, стройка, логистика","старый город, храм рядом — образование, религия, наставничество","партнёрское жильё, общежитие — переговоры, HR, искусство","дом на колёсах, у дороги — транспорт, туризм, спорт","рядом с судом, госучреждением — юриспруденция, аудит, контроль","уединённое место, лес, горы — наука, писательство, аналитика"],
+ en:["","city centre, studio, minimalism — own business, leadership, start-up","quiet area, by water, house with history — research, psychology, archives","house with a garden, kitchen, lounge — creativity, décor, cooking","flat with a clear layout — administration, construction, logistics","old town, near a temple — education, religion, mentoring","shared housing, dorm — negotiation, HR, art","home on wheels, by the road — transport, tourism, sport","near a court or government office — law, audit, control","secluded place, forest, mountains — science, writing, analytics"]
+};
+const grp=k=>(k-1)%9+1;
+const pol=k=>k===11||k===22?{ru:"ось",en:"axis"}:(k<=10?{ru:"ян · избыток, внешнее",en:"yang · excess, outward"}:{ru:"инь · недостаток, внутреннее",en:"yin · deficiency, inward"});
+
+/* ===================== MATH ===================== */
+const dsum=n=>String(Math.abs(n)).split("").reduce((a,b)=>a+ +b,0);
+function sv(n){while(n<1)n+=22;while(n>=100)n=dsum(n);while(n>22)n-=22;return n}
+function g2j(d,m,y){const a=Math.floor((14-m)/12),y2=y+4800-a,m2=m+12*a-3;
+ const J=d+Math.floor((153*m2+2)/5)+365*y2+Math.floor(y2/4)-Math.floor(y2/100)+Math.floor(y2/400)-32045;
+ const c=J+32082,d1=Math.floor((4*c+3)/1461),e=c-Math.floor(1461*d1/4),m1=Math.floor((5*e+2)/153);
+ return {d:e-Math.floor((153*m1+2)/5)+1,m:m1+3-12*Math.floor(m1/10),y:d1-4800+Math.floor(m1/10),shift:null}}
+const POS=[
+ {ru:"Суть",en:"Essence",f:"Σ цифр даты / Σ digits"},
+ {ru:"Партнёр",en:"Partner",f:"22 − P1"},
+ {ru:"Талант",en:"Talent",f:"Д + М"},
+ {ru:"Место",en:"Place",f:"Д + М + Г"},
+ {ru:"Деньги (через кого)",en:"Money (through whom)",f:"Д × М + Г"},
+ {ru:"Падение",en:"Fall",f:"Д + Г + 13"},
+ {ru:"Болезнь",en:"Illness",f:"22 − (Д + М + 7)"},
+ {ru:"Макс. деньги",en:"Max money",f:"св(Д × М × Г) + 13"},
+ {ru:"Работа",en:"Work",f:"Д × М"},
+ {ru:"Отец, мужской род",en:"Father, male line",f:"Д + 13"},
+ {ru:"Мать, женский род",en:"Mother, female line",f:"М + 13"},
+ {ru:"Дети",en:"Children",f:"Г + 7"},
+ {ru:"Окружение, друзья",en:"Circle, friends",f:"М + Г"},
+ {ru:"Конкуренты, враги",en:"Rivals, enemies",f:"22 − P13"},
+ {ru:"Страх",en:"Fear",f:"22 − P3"},
+ {ru:"Искушение",en:"Temptation",f:"Д + М + Г + 13"},
+ {ru:"Удача",en:"Luck",f:"Д + 7"},
+ {ru:"Любовь, радость",en:"Love, joy",f:"Д + М + 7"},
+ {ru:"Взлёт",en:"Rise",f:"22 − P6"},
+ {ru:"Учитель",en:"Teacher",f:"Д × Г"},
+ {ru:"Путь после 40",en:"Path after 40",f:"М × Г"},
+ {ru:"Итог",en:"Total",f:"Σ P1…P21"}
+];
+function calc(J){
+ const D=sv(J.d),M=J.m,G=sv(dsum(J.y));
+ const dig=String(J.d).padStart(2,"0")+String(J.m).padStart(2,"0")+String(J.y);
+ const P=[0];
+ P[1]=sv(dsum(+dig));P[2]=sv(22-P[1]);P[3]=sv(D+M);P[4]=sv(D+M+G);P[5]=sv(D*M+G);P[6]=sv(D+G+13);
+ P[7]=sv(22-(D+M+7));P[8]=sv(sv(D*M*G)+13);P[9]=sv(D*M);P[10]=sv(D+13);P[11]=sv(M+13);P[12]=sv(G+7);
+ P[13]=sv(M+G);P[14]=sv(22-P[13]);P[15]=sv(22-P[3]);P[16]=sv(D+M+G+13);P[17]=sv(D+7);P[18]=sv(D+M+7);
+ P[19]=sv(22-P[6]);P[20]=sv(D*G);P[21]=sv(M*G);
+ let s=0;for(let i=1;i<=21;i++)s+=P[i];P[22]=sv(s);
+ return {D,M,G,P,dig};
+}
+const CH={1:{ru:"Вишудха",en:"Vishuddha",c:"#29b6e8"},2:{ru:"Свадхистана",en:"Svadhisthana",c:"#f39c12"},3:{ru:"Сахасрара",en:"Sahasrara",c:"#9b4dd6"},
+ 4:{ru:"Анахата",en:"Anahata",c:"#2fb455"},5:{ru:"Манипура",en:"Manipura",c:"#e6c200"},6:{ru:"Аджна",en:"Ajna",c:"#3a63e0"},7:{ru:"Муладхара",en:"Muladhara",c:"#e0303a"}};
+const CH_ORDER=[3,6,1,4,5,2,7];
+
+/* ===================== I18N ===================== */
+const T={
+ ru:{tabArc:"Арканум · Юлиан",tabVed:"Ведическая астрология",title:"Арканум калькулятор",subtitle:"юлианский · круг 22 · чакры · ТКМ",
+  ticker:"Введите григорианскую дату рождения — калькулятор сам переведёт её в юлианский календарь ◆ 22 позиции судьбы ◆ 7 треугольников-чакр ◆ 22 аркана в системе ТКМ ◆ ци-часы и мозговые ритмы",
+  inputTitle:"Дата рождения (григорианская)",day:"Число",month:"Месяц",year:"Год",calc:"Рассчитать",
+  months:["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+  greg:"Григорианская",jul:"Юлианская",shift:"сдвиг",days:"дн.",badDate:"Такой даты не существует",
+  wheelTitle:"Круг 22 и семь чакр",chakraNote:"Каждая чакра — равносторонний треугольник из позиций Pk, Pk+7, Pk+14. Главный аркан чакры — сумма трёх вершин.",
+  loadTitle:"Нагрузка по стихиям ТКМ",loadNote:"Сколько из 22 позиций попало в каждую систему тела. Пустая стихия — зона, которой не хватает энергии; перегруженная — где энергия застревает.",
+  keyTitle:"Социальная реализация · ключевые позиции",keyNote:"Две главные точки реализации: P4 — куда идти (тип места, город, среда), P8 — где максимальные деньги (контракты, масштаб).",k4:"Куда я пойду: основной тип места, города и среды, где раскрываешься.",k8:"Максимальные деньги: где контракты, масштаб и главный доход.",posTitle:"22 позиции · что значит аркан",medTitle:"Здоровье · 7 центров (ТКМ)",medNote:"Главный аркан каждой чакры показывает, какая система тела отвечает за этот центр, когда пик её ци и какие мышцы держат напряжение.",light:"Свет",shadowW:"Тень",refTitle:"Справочник: 22 аркана в ТКМ",
+  refNote:"Каждая стихия держит 4 аркана — две зеркальные пары (k и 22 − k): одна пара — плотный орган, другая — полый. Арканы 1–10 — ян (избыток, внешнее), 12–21 — инь (недостаток, внутреннее). Ось 11–22 — нервная и гормональная система.",
+  methodTitle:"Методика",organ:"Орган",element:"Стихия",hours:"Ци-часы",wave:"Ритм",muscles:"Мышцы",place:"Место / дело",
+  total:"итог",tri:"Треугольник",
+  method:`<ol>
+<li><b>Перевод в юлианский календарь.</b> Введённая григорианская дата переводится в юлианскую через юлианский номер дня. Разница: 10 дней до 1700 г., 11 — в XVIII в., 12 — в XIX в., 13 — в 1900–2099 гг. Пример: 01.01.2000 → 19.12.1999.</li>
+<li><b>Три опорных числа.</b> Д — юлианский день, М — месяц, Г — сумма цифр года. Они образуют треугольник основы.</li>
+<li><b>Свёртка к 1–22.</b> Отрицательное число: +22. Трёхзначное и больше: сумма цифр. Больше 22: −22, пока не станет 1–22. Счёт идёт по кругу из 22 делений.</li>
+<li><b>22 позиции.</b> Формулы используют только Д, М, Г, две постоянные — 13 (календарный сдвиг) и 7 — и три действия: сложение, умножение, отражение (22 − x). Отражение даёт зеркальные пары: суть ↔ партнёр, талант ↔ страх, друзья ↔ враги, любовь ↔ болезнь, взлёт ↔ падение.</li>
+<li><b>Фигура.</b> P22 «Итог» стоит в центре, P1–P21 — по кругу против часовой стрелки. 21 = 7 × 3, поэтому круг делится на 7 равносторонних треугольников (Pk, Pk+7, Pk+14). Каждый треугольник — чакра, её главный аркан — сумма вершин.</li>
+<li><b>ТКМ.</b> 20 арканов делятся на 5 стихий по 4 (по кругу порождения: Земля → Металл → Вода → Дерево → Огонь), ось 11–22 — нервная и гормональная система. Каждому органу соответствуют ци-часы, мозговой ритм и группа мышц.</li>
+<li><b>Смыслы места и дела</b> повторяются с шагом 9: арканы 1, 10, 19 имеют один смысл, 2, 11, 20 — другой и т. д.</li>
+</ol>
+<div class="warn">Авторская эзотерическая система для самопознания. Не является медицинской диагностикой и не заменяет врача.</div>`,
+  copy:"© 2026 Арканум · юлианский калькулятор «Круг 22». Авторская методика. Все права защищены. Копирование методики и материалов без согласия автора запрещено."},
+ en:{tabArc:"Arcanum · Julian",tabVed:"Vedic astrology",title:"Arcanum Calculator",subtitle:"julian · circle 22 · chakras · TCM",
+  ticker:"Enter your Gregorian birth date — the calculator converts it to the Julian calendar ◆ 22 positions of fate ◆ 7 chakra triangles ◆ 22 arcana in TCM ◆ qi clock and brainwaves",
+  inputTitle:"Date of birth (Gregorian)",day:"Day",month:"Month",year:"Year",calc:"Calculate",
+  months:["January","February","March","April","May","June","July","August","September","October","November","December"],
+  greg:"Gregorian",jul:"Julian",shift:"shift",days:"days",badDate:"This date does not exist",
+  wheelTitle:"Circle 22 and seven chakras",chakraNote:"Each chakra is an equilateral triangle of positions Pk, Pk+7, Pk+14. The chakra's main arcanum is the sum of its three vertices.",
+  loadTitle:"Load by TCM element",loadNote:"How many of the 22 positions fall into each body system. An empty element lacks energy; an overloaded one is where energy gets stuck.",
+  keyTitle:"Social realisation · key positions",keyNote:"The two main points of realisation: P4 — where to go (type of place, city, environment), P8 — where the maximum money is (contracts, scale).",k4:"Where I go: the main type of place, city and environment where you unfold.",k8:"Maximum money: where the contracts, scale and main income are.",posTitle:"22 positions · what the arcanum means",medTitle:"Health · 7 centres (TCM)",medNote:"The main arcanum of each chakra shows which body system governs that centre, when its qi peaks and which muscles hold the tension.",light:"Light",shadowW:"Shadow",refTitle:"Reference: 22 arcana in TCM",
+  refNote:"Each element holds 4 arcana — two mirror pairs (k and 22 − k): one pair is the solid organ, the other the hollow one. Arcana 1–10 are yang (excess, outward), 12–21 are yin (deficiency, inward). Axis 11–22 is the nervous and hormonal system.",
+  methodTitle:"Method",organ:"Organ",element:"Element",hours:"Qi hours",wave:"Rhythm",muscles:"Muscles",place:"Place / work",
+  total:"total",tri:"Triangle",
+  method:`<ol>
+<li><b>Conversion to the Julian calendar.</b> The Gregorian date is converted via the Julian Day Number. Difference: 10 days before 1700, 11 in the 18th c., 12 in the 19th c., 13 in 1900–2099. Example: 01.01.2000 → 19.12.1999.</li>
+<li><b>Three base numbers.</b> D — Julian day, M — month, Y — digit sum of the year (Д, М, Г in formulas). They form the base triangle.</li>
+<li><b>Reduction to 1–22.</b> Negative: +22. Three digits or more: digit sum. Above 22: −22 until 1–22. Counting goes around a circle of 22.</li>
+<li><b>22 positions.</b> Formulas use only D, M, Y, two constants — 13 (the calendar shift) and 7 — and three operations: addition, multiplication, reflection (22 − x). Reflection gives mirror pairs: essence ↔ partner, talent ↔ fear, friends ↔ enemies, love ↔ illness, rise ↔ fall.</li>
+<li><b>The figure.</b> P22 "Total" sits in the centre, P1–P21 go around the circle counter-clockwise. 21 = 7 × 3, so the circle splits into 7 equilateral triangles (Pk, Pk+7, Pk+14). Each triangle is a chakra; its main arcanum is the sum of the vertices.</li>
+<li><b>TCM.</b> 20 arcana form 5 elements of 4 (following the generating cycle: Earth → Metal → Water → Wood → Fire); axis 11–22 is the nervous and hormonal system. Each organ has its qi hours, brainwave and muscle group.</li>
+<li><b>Place and work meanings</b> repeat every 9: arcana 1, 10, 19 share one meaning, 2, 11, 20 another, and so on.</li>
+</ol>
+<div class="warn">An original esoteric system for self-exploration. It is not a medical diagnosis and does not replace a doctor.</div>`,
+  copy:"© 2026 Arcanum · Julian calculator \"Circle 22\". Original method. All rights reserved. Copying the method or materials without the author's consent is prohibited."}
+};
+let L="ru";try{L=localStorage.getItem("arcLang")||"ru"}catch(e){}
+let last=null;
+
+/* ===================== RENDER ===================== */
+const $=id=>document.getElementById(id);
+function applyLang(){
+ document.documentElement.lang=L;
+ document.querySelectorAll("[data-t]").forEach(el=>el.textContent=T[L][el.dataset.t]);
+ document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.l===L));
+ const ms=$("m"),cur=ms.value;ms.innerHTML=T[L].months.map((n,i)=>`<option value="${i+1}">${n}</option>`).join("");ms.value=cur||1;
+ $("method").innerHTML=T[L].method;$("copy").textContent=T[L].copy;
+ renderRef();if(last)render(last);
+ if(typeof vApplyLang==="function")vApplyLang();
+}
+function tcmLine(a){const t=TCM[a],e=EL[t.e];
+ return `<span class="tag" style="border-color:${e.c}">${e[L]}</span><span class="tag">${t.o[L]}</span><span class="tag">${pol(a)[L]}</span><span class="tag">⏱ ${t.h} ${L==="ru"?"ч":"h"}</span><span class="tag">〰 ${e.wave[L]}</span>`}
+function renderRef(){
+ let h="";for(let a=1;a<=22;a++){const t=TCM[a],e=EL[t.e];
+  h+=`<details><summary><span class="ball" style="background:${e.c}">${a}</span><span>${ARC[L][a]} — ${t.o[L]}</span></summary><div class="body">${tcmLine(a)}<p>${t[L]}</p><p class="small"><b>${T[L].muscles}:</b> ${e.mus[L]}<br><b>${T[L].place}:</b> ${GRP[L][grp(a)]}</p></div></details>`}
+ $("ref").innerHTML=h;
+}
+function wheel(P){
+ const W=620,cx=310,cy=310,R=235,pt=(i,r=R)=>{const a=(-90-(i-1)*360/21)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)]};
+ let s=`<svg viewBox="0 0 ${W} ${W}" role="img" aria-label="Circle 22">`;
+ s+=`<defs><radialGradient id="rg"><stop offset="0" stop-color="#0c0c0c"/><stop offset="1" stop-color="#000"/></radialGradient></defs>`;
+ s+=`<circle cx="${cx}" cy="${cy}" r="${R+20}" fill="url(#rg)" stroke="#2a2a2a" stroke-width="1"/><circle cx="${cx}" cy="${cy}" r="${R+26}" fill="none" stroke="#e3122d" stroke-width=".6" opacity=".5"/>`;
+ for(let t=1;t<=7;t++){const pts=[t,t+7,t+14].map(i=>pt(i).join(",")).join(" ");s+=`<polygon points="${pts}" fill="none" stroke="${CH[t].c}" stroke-width="1" opacity=".85"/>`}
+ for(let i=1;i<=21;i++){const t=(i-1)%7+1,[x,y]=pt(i),[lx,ly]=pt(i,R+52);
+  s+=`<circle cx="${x}" cy="${y}" r="19" fill="${CH[t].c}" stroke="#000" stroke-width="1.5"/><text x="${x}" y="${y+5.5}" text-anchor="middle" font-size="15" font-weight="400" fill="#fff" font-family="Bank Gothic, Jura, Arial, sans-serif">${P[i]}</text>`;
+  s+=`<text x="${lx}" y="${ly-2}" text-anchor="middle" font-size="10" font-weight="300" fill="#8a8a8a" font-family="Bank Gothic, Jura, Arial, sans-serif">P${i}</text><text x="${lx}" y="${ly+12}" text-anchor="middle" font-size="9.5" fill="#d6d6d6" font-family="Bank Gothic, Jura, Arial, sans-serif">${POS[i-1][L].split(",")[0].split(" (")[0]}</text>`}
+ s+=`<circle cx="${cx}" cy="${cy}" r="40" fill="#000" stroke="#e3122d" stroke-width="1"/><text x="${cx}" y="${cy+6}" text-anchor="middle" font-size="24" font-weight="400" fill="#fff" font-family="Bank Gothic, Jura, Arial, sans-serif">${P[22]}</text><text x="${cx}" y="${cy+24}" text-anchor="middle" font-size="8" fill="#8a8a8a" font-family="Bank Gothic, Jura, Arial, sans-serif">P22 ${T[L].total}</text>`;
+ return s+"</svg>";
+}
+function render(r){
+ const {g,j,res}=r,{D,M,G,P}=res,f=x=>String(x).padStart(2,"0");
+ const sh=Math.round((Date.UTC(g.y,g.m-1,g.d)-Date.UTC(j.y,j.m-1,j.d))/864e5);
+ $("conv").innerHTML=`<span class="d">${T[L].greg}: ${f(g.d)}.${f(g.m)}.${g.y}</span> <span style="color:#e3122d;font-size:18px">→</span> <span class="d j">${T[L].jul}: ${f(j.d)}.${f(j.m)}.${j.y}</span> <span class="small">(${T[L].shift} ${sh} ${T[L].days})</span>`;
+ $("base").innerHTML=`<div>${L==="ru"?"Д":"D"} = <b>${D}</b></div><div>${L==="ru"?"М":"M"} = <b>${M}</b></div><div>${L==="ru"?"Г":"Y"} = <b>${G}</b></div><div>P1 = Σ ${res.dig.split("").join("+")} → <b>${P[1]}</b></div>`;
+ $("wheel").innerHTML=wheel(P);
+ // chakras
+ let c="";CH_ORDER.forEach(t=>{const v=[t,t+7,t+14],m=sv(v.reduce((a,i)=>a+P[i],0)),e=EL[TCM[m].e];
+  c+=`<tr><td style="border-left:2px solid ${CH[t].c}"><div class="cname" style="color:${CH[t].c}">${CH[t][L]}</div><div class="small">${v.map(i=>`P${i} ${POS[i-1][L]} (${P[i]})`).join(" · ")}</div></td><td><span class="ball" style="background:${CH[t].c}">${m}</span></td><td class="small"><b style="color:#fff">${ARC[L][m]}</b><br>${TCM[m].o[L]} · ${e[L]}</td></tr>`});
+ $("chk").innerHTML=c;
+ // load
+ const cnt={Z:0,M:0,V:0,D:0,O:0,N:0};for(let i=1;i<=22;i++)cnt[TCM[P[i]].e]++;
+ $("load").innerHTML=Object.keys(cnt).map(k=>`<div class="row"><div><b style="color:${EL[k].c}">${EL[k][L]}</b><div class="small">${EL[k].sys[L]}</div></div><div class="bar"><i style="width:${cnt[k]/22*100*2.2}%;max-width:100%;background:${EL[k].c}"></i></div><b>${cnt[k]}</b></div>`).join("");
+ // key positions P4, P8
+ $("keys").innerHTML=[[4,"k4"],[8,"k8"]].map(([i,k])=>{const a=P[i],e=EL[TCM[a].e];return `<div class="key"><div class="kh"><span class="ball big" style="background:${e.c}">${a}</span><div><div class="kp">P${i} · ${POS[i-1].f}</div><div class="kn">${POS[i-1][L]}</div><div class="small">${ARC[L][a]}</div></div></div><div class="kd">${T[L][k]}</div><p><b>${T[L].place}:</b> ${GRP[L][grp(a)]}</p><p><b>${T[L].light}:</b> ${SOC[a][L]}</p><p class="shadow"><b>${T[L].shadowW}:</b> ${SOC[a][L+"S"]}</p></div>`}).join("");
+ // cards (social)
+ let h="";for(let i=1;i<=22;i++){const a=P[i],e=EL[TCM[a].e];
+  h+=`<div class="card" style="border-left-color:${e.c}"><div class="h"><span class="ball" style="background:${e.c}">${a}</span><div><div class="pn">P${i} · <span class="fx">${POS[i-1].f}</span></div><div class="nm">${POS[i-1][L]}</div><div class="small">${ARC[L][a]}</div></div></div><div class="soc"><p><b>${T[L].light}:</b> ${SOC[a][L]}</p><p class="shadow"><b>${T[L].shadowW}:</b> ${SOC[a][L+"S"]}</p></div><div class="mus"><b>${T[L].place}:</b> ${GRP[L][grp(a)]}</div></div>`}
+ // medical: 7 centres
+ let md="";CH_ORDER.forEach(t=>{const m=sv([t,t+7,t+14].reduce((x,i)=>x+P[i],0)),tc=TCM[m],e=EL[tc.e];
+  md+=`<div class="mc" style="border-left:2px solid ${CH[t].c}"><span class="ball" style="background:${CH[t].c}">${m}</span><div><div class="cn" style="color:${CH[t].c}">${CH[t][L]} · ${ARC[L][m]}</div><div style="margin-top:6px">${tcmLine(m)}</div><p>${tc[L]}</p><div class="small" style="margin-top:6px"><b>${T[L].muscles}:</b> ${e.mus[L]}</div></div></div>`});
+ $("med").innerHTML=md;
+ $("cards").innerHTML=h;$("out").hidden=false;
+}
+function run(){
+ const d=+$("d").value,m=+$("m").value,y=+$("y").value;$("err").textContent="";
+ const dt=new Date(Date.UTC(y,m-1,d));
+ if(!y||y<1600||y>2200||dt.getUTCDate()!==d){$("err").textContent=T[L].badDate;$("out").hidden=true;$("conv").innerHTML="";$("base").innerHTML="";last=null;return}
+ const j=g2j(d,m,y);last={g:{d,m,y},j,res:calc(j)};render(last);
+}
+/* init */
+$("d").innerHTML=Array.from({length:31},(_,i)=>`<option>${i+1}</option>`).join("");$("d").value=1;
+$("m").innerHTML="<option value='12'>12</option>";
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{L=b.dataset.l;try{localStorage.setItem("arcLang",L)}catch(e){}applyLang()});
+$("go").onclick=run;
+applyLang();$("m").value=1;run();
+</script>
+<script>
+/* ===================== VEDIC: EPHEMERIS ===================== */
+const V=(()=>{
+const D2R=Math.PI/180,R2D=180/Math.PI,norm=x=>((x%360)+360)%360,sin=x=>Math.sin(x*D2R),cos=x=>Math.cos(x*D2R);
+function jdOf(y,m,d,h,julianCal){if(m<=2){y--;m+=12}const A=Math.floor(y/100),B=julianCal?0:2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5+h/24}
+function calOf(jd){const z=Math.floor(jd+0.5),f=jd+0.5-z;let A=z;if(z>=2299161){const a=Math.floor((z-1867216.25)/36524.25);A=z+1+a-Math.floor(a/4)}const B=A+1524,C=Math.floor((B-122.1)/365.25),D=Math.floor(365.25*C),E=Math.floor((B-D)/30.6001);const day=B-D-Math.floor(30.6001*E)+f;const m=E<14?E-1:E-13,y=m>2?C-4716:C-4715;return {y,m,d:Math.floor(day)}}
+function deltaT(y){let t;
+ if(y<1860){const u=(y-1820)/100;return -20+32*u*u}
+ if(y<1900){t=y-1860;return 7.62+0.5737*t-0.251754*t*t+0.01680668*t**3-0.0004473624*t**4+t**5/233174}
+ if(y<1920){t=y-1900;return -2.79+1.494119*t-0.0598939*t*t+0.0061966*t**3-0.000197*t**4}
+ if(y<1941){t=y-1920;return 21.20+0.84493*t-0.07610*t*t+0.0020936*t**3}
+ if(y<1961){t=y-1950;return 29.07+0.407*t-t*t/233+t**3/2547}
+ if(y<1986){t=y-1975;return 45.45+1.067*t-t*t/260-t**3/718}
+ if(y<2005){t=y-2000;return 63.86+0.3345*t-0.060374*t*t+0.0017275*t**3+0.000651814*t**4+0.00002373599*t**5}
+ if(y<2050){t=y-2000;return 62.92+0.32217*t+0.005589*t*t}
+ if(y<2150)return -20+32*((y-1820)/100)**2-0.5628*(2150-y);
+ const u=(y-1820)/100;return -20+32*u*u}
+function nut(T){const Om=125.04452-1934.136261*T,L=280.4665+36000.7698*T,Lp=218.3165+481267.8813*T;
+ return {dpsi:(-17.20*sin(Om)-1.32*sin(2*L)-0.23*sin(2*Lp)+0.21*sin(2*Om))/3600,deps:(9.20*cos(Om)+0.57*cos(2*L)+0.10*cos(2*Lp)-0.09*cos(2*Om))/3600}}
+const obliq=T=>23.4392911-(46.8150*T+0.00059*T*T-0.001813*T**3)/3600;
+function sun(T){const L0=280.46646+36000.76983*T+0.0003032*T*T,M=357.52911+35999.05029*T-0.0001537*T*T,e=0.016708634-0.000042037*T-0.0000001267*T*T;
+ const C=(1.914602-0.004817*T-0.000014*T*T)*sin(M)+(0.019993-0.000101*T)*sin(2*M)+0.000289*sin(3*M);const R=1.000001018*(1-e*e)/(1+e*cos(M+C));return {lon:norm(L0+C),R}}
+const MT=[[0,0,1,0,6288774],[2,0,-1,0,1274027],[2,0,0,0,658314],[0,0,2,0,213618],[0,1,0,0,-185116],[0,0,0,2,-114332],[2,0,-2,0,58793],[2,-1,-1,0,57066],[2,0,1,0,53322],[2,-1,0,0,45758],[0,1,-1,0,-40923],[1,0,0,0,-34720],[0,1,1,0,-30383],[2,0,0,-2,15327],[0,0,1,2,-12528],[0,0,1,-2,10980],[4,0,-1,0,10675],[0,0,3,0,10034],[4,0,-2,0,8548],[2,1,-1,0,-7888],[2,1,0,0,-6766],[1,0,-1,0,-5163],[1,1,0,0,4987],[2,-1,1,0,4036],[2,0,2,0,3994],[4,0,0,0,3861],[2,0,-3,0,3665],[0,1,-2,0,-2689],[2,0,-1,2,-2602],[2,-1,-2,0,2390],[1,0,1,0,-2348],[2,-2,0,0,2236],[0,1,2,0,-2120],[0,2,0,0,-2069],[2,-2,-1,0,2048],[2,0,1,-2,-1773],[2,0,0,2,-1595],[4,-1,-1,0,1215],[0,0,2,2,-1110],[3,0,-1,0,-892],[2,1,1,0,-810],[4,-1,-2,0,759],[0,2,-1,0,-713],[2,2,-1,0,-700],[2,1,-2,0,691],[2,-1,0,-2,596],[4,0,1,0,549],[0,0,4,0,537],[4,-1,0,0,520],[1,0,-2,0,-487],[2,1,0,-2,-399],[0,0,2,-2,-381],[1,1,1,0,351],[3,0,-2,0,-340],[4,0,-3,0,330],[2,-1,2,0,327],[0,2,1,0,-323],[1,1,-1,0,299],[2,0,3,0,294]];
+function moon(T){const Lp=218.3164477+481267.88123421*T-0.0015786*T*T+T**3/538841-T**4/65194000,
+ D=297.8501921+445267.1114034*T-0.0018819*T*T+T**3/545868-T**4/113065000,M=357.5291092+35999.0502909*T-0.0001536*T*T+T**3/24490000,
+ Mp=134.9633964+477198.8675055*T+0.0087414*T*T+T**3/69699-T**4/14712000,F=93.2720950+483202.0175233*T-0.0036539*T*T-T**3/3526000+T**4/863310000,
+ A1=119.75+131.849*T,A2=53.09+479264.290*T,E=1-0.002516*T-0.0000074*T*T;
+ let s=0;for(const [d,m,mp,f,c] of MT){let k=c;if(Math.abs(m)==1)k*=E;else if(Math.abs(m)==2)k*=E*E;s+=k*sin(d*D+m*M+mp*Mp+f*F)}
+ s+=3958*sin(A1)+1962*sin(Lp-F)+318*sin(A2);
+ const mn=125.0445479-1934.1362891*T+0.0020754*T*T+T**3/467441-T**4/60616000;
+ const tn=mn-1.4979*sin(2*(D-F))-0.1500*sin(M)-0.1226*sin(2*D)+0.1176*sin(2*F)-0.0801*sin(2*(Mp-F));
+ return {lon:norm(Lp+s/1e6),node:norm(tn)}}
+const EL={Me:[48.3313,3.24587e-5,7.0047,5.0e-8,29.1241,1.01444e-5,0.387098,0.205635,5.59e-10,168.6562,4.0923344368],
+ Ve:[76.6799,2.46590e-5,3.3946,2.75e-8,54.8910,1.38374e-5,0.723330,0.006773,-1.302e-9,48.0052,1.6021302244],
+ Ma:[49.5574,2.11081e-5,1.8497,-1.78e-8,286.5016,2.92961e-5,1.523688,0.093405,2.516e-9,18.6021,0.5240207766],
+ Ju:[100.4542,2.76854e-5,1.3030,-1.557e-7,273.8777,1.64505e-5,5.20256,0.048498,4.469e-9,19.8950,0.0830853001],
+ Sa:[113.6634,2.38980e-5,2.4886,-1.081e-7,339.3939,2.97661e-5,9.55475,0.055546,-9.499e-9,316.9670,0.0334442282]};
+function kep(M,e){let E=M+R2D*e*sin(M)*(1+e*cos(M));for(let i=0;i<30;i++){const dE=(E-R2D*e*sin(E)-M)/(1-e*cos(E));E-=dE;if(Math.abs(dE)<1e-10)break}return E}
+function helio(p,d){const q=EL[p],N=q[0]+q[1]*d,i=q[2]+q[3]*d,w=q[4]+q[5]*d,a=q[6],e=q[7]+q[8]*d,M=norm(q[9]+q[10]*d);
+ const E=kep(M,e),xv=a*(cos(E)-e),yv=a*Math.sqrt(1-e*e)*sin(E),v=Math.atan2(yv,xv)*R2D,r=Math.hypot(xv,yv);
+ const xh=r*(cos(N)*cos(v+w)-sin(N)*sin(v+w)*cos(i)),yh=r*(sin(N)*cos(v+w)+cos(N)*sin(v+w)*cos(i)),zh=r*sin(v+w)*sin(i);
+ let lon=norm(Math.atan2(yh,xh)*R2D),lat=Math.atan2(zh,Math.hypot(xh,yh))*R2D;
+ if(p=='Ju'||p=='Sa'){const Mj=norm(19.8950+0.0830853001*d),Ms=norm(316.9670+0.0334442282*d);
+  if(p=='Ju')lon+=-0.332*sin(2*Mj-5*Ms-67.6)-0.056*sin(2*Mj-2*Ms+21)+0.042*sin(3*Mj-5*Ms+21)-0.036*sin(Mj-2*Ms)+0.022*cos(Mj-Ms)+0.023*sin(2*Mj-3*Ms+52)-0.016*sin(Mj-5*Ms-69);
+  else{lon+=0.812*sin(2*Mj-5*Ms-67.6)-0.229*cos(2*Mj-4*Ms-2)+0.119*sin(Mj-2*Ms-3)+0.046*sin(2*Mj-6*Ms-69)+0.014*sin(Mj-3*Ms+32);lat+=-0.020*cos(2*Mj-4*Ms-2)+0.018*sin(2*Mj-6*Ms-49)}}
+ return {x:r*cos(lon)*cos(lat),y:r*sin(lon)*cos(lat),z:r*sin(lat)}}
+function earthSun(d){const w=282.9404+4.70935e-5*d,e=0.016709-1.151e-9*d,M=norm(356.0470+0.9856002585*d),E=kep(M,e),xv=cos(E)-e,yv=Math.sqrt(1-e*e)*sin(E),r=Math.hypot(xv,yv),lon=norm(Math.atan2(yv,xv)*R2D+w);return {x:r*cos(lon),y:r*sin(lon)}}
+function planet(p,d){const s=earthSun(d);let h=helio(p,d),dist=Math.hypot(h.x+s.x,h.y+s.y,h.z);h=helio(p,d-0.0057755183*dist);return norm(Math.atan2(h.y+s.y,h.x+s.x)*R2D)}
+const AY0=23.8418,AYR=1.396971; // Lahiri, calibrated to vedic-horo.ru
+function positions(jdUT,lat,lon){
+ const y=calOf(jdUT).y,jd=jdUT+deltaT(y)/86400,T=(jd-2451545)/36525,d=jd-2451543.5,n=nut(T),eps=obliq(T)+n.deps,ay=AY0+AYR*T+0.000308*T*T;
+ const t={};const s=sun(T);t.Su=s.lon-20.4898/3600/s.R+n.dpsi;const m=moon(T);t.Mo=m.lon+n.dpsi;
+ for(const p of ['Ma','Me','Ju','Ve','Sa'])t[p]=planet(p,d)+n.dpsi;t.Ra=m.node;t.Ke=m.node+180;
+ const Tu=(jdUT-2451545)/36525,gmst=280.46061837+360.98564736629*(jdUT-2451545)+0.000387933*Tu*Tu-Tu**3/38710000,ramc=norm(gmst+n.dpsi*cos(eps)+lon);
+ t.As=Math.atan2(cos(ramc),-(sin(ramc)*cos(eps)+Math.tan(lat*D2R)*sin(eps)))*R2D;
+ const o={};for(const k in t)o[k]=norm(t[k]-ay);o.ay=ay;return o}
+return {jdOf,calOf,positions,norm};
+})();
+
+/* ===================== VEDIC: ASTROLOGY ===================== */
+const VP=['As','Su','Mo','Ma','Me','Ju','Ve','Sa','Ra','Ke'];
+const VPN={ru:{As:"Асцендент",Su:"Солнце",Mo:"Луна",Ma:"Марс",Me:"Меркурий",Ju:"Юпитер",Ve:"Венера",Sa:"Сатурн",Ra:"Раху",Ke:"Кету"},en:{As:"Ascendant",Su:"Sun",Mo:"Moon",Ma:"Mars",Me:"Mercury",Ju:"Jupiter",Ve:"Venus",Sa:"Saturn",Ra:"Rahu",Ke:"Ketu"}};
+const VPA={ru:{As:"Ас",Su:"Су",Mo:"Лу",Ma:"Ма",Me:"Ме",Ju:"Юп",Ve:"Ве",Sa:"Са",Ra:"Ра",Ke:"Ке"},en:{As:"As",Su:"Su",Mo:"Mo",Ma:"Ma",Me:"Me",Ju:"Ju",Ve:"Ve",Sa:"Sa",Ra:"Ra",Ke:"Ke"}};
+const SIGN={ru:["Овен","Телец","Близнецы","Рак","Лев","Дева","Весы","Скорпион","Стрелец","Козерог","Водолей","Рыбы"],en:["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"]};
+const NAK={ru:["Ашвини","Бхарани","Криттика","Рохини","Мригашира","Ардра","Пунарвасу","Пушья","Ашлеша","Магха","Пурва-пхалгуни","Уттара-пхалгуни","Хаста","Читра","Свати","Вишакха","Анурадха","Джйештха","Мула","Пурвашадха","Уттарашадха","Шравана","Дхаништха","Шатабхиша","Пурвабхадра","Уттарабхадра","Ревати"],
+ en:["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"]};
+const DLORD=['Ke','Ve','Su','Mo','Ma','Ra','Ju','Sa','Me'],DYRS={Ke:7,Ve:20,Su:6,Mo:10,Ma:7,Ra:18,Ju:16,Sa:19,Me:17};
+const SLORD=['Ma','Ve','Me','Mo','Su','Me','Ve','Ma','Ju','Sa','Sa','Ju'];
+const EXA={Su:[0,10],Mo:[1,3],Ma:[9,28],Me:[5,15],Ju:[3,5],Ve:[11,27],Sa:[6,20]};
+const MOOL={Su:[4,0,20],Mo:[1,3,30],Ma:[0,0,12],Me:[5,15,20],Ju:[8,0,10],Ve:[6,0,15],Sa:[10,0,20]};
+const NAT={Su:{f:'Mo Ma Ju',e:'Ve Sa'},Mo:{f:'Su Me',e:''},Ma:{f:'Su Mo Ju',e:'Me'},Me:{f:'Su Ve',e:'Mo'},Ju:{f:'Su Mo Ma',e:'Me Ve'},Ve:{f:'Me Sa',e:'Su Mo'},Sa:{f:'Me Ve',e:'Su Mo Ma'},Ra:{f:'Me Ve Sa',e:'Su Mo Ma'},Ke:{f:'Ma Ju',e:'Su Mo'}};
+const KAR={ru:['АК','АмК','БК','МК','ПК','ГК','ДК'],en:['AK','AmK','BK','MK','PK','GK','DK']};
+const STD=[1,2,3,4,5,6,7,8,9,10,11,12,16,20,24,27,30,40,45,60];
+const EXT=[72,81,84,100,108,120,144,150,180,216,240,300,360,432,500,600,720,900,1000];
+const VNAME={ru:{1:"Раши",2:"Хора",3:"Дреккана",4:"Чатуртхамша",5:"Панчамша",6:"Шаштамша",7:"Саптамша",8:"Аштамша",9:"Навамша",10:"Дашамша",11:"Рудрамша",12:"Двадашамша",16:"Шодашамша",20:"Вимшамша",24:"Сиддхамша",27:"Накшатрамша",30:"Тримшамша",40:"Кхаведамша",45:"Акшаведамша",60:"Шаштьямша",72:"Ашта-навамша",81:"Нава-навамша",108:"Аштоттарамша",144:"Двадаш-двадашамша",150:"Нади-амша",300:"Ардха-нади",1000:"Сахасрамша"},
+ en:{1:"Rashi",2:"Hora",3:"Drekkana",4:"Chaturthamsha",5:"Panchamsha",6:"Shashthamsha",7:"Saptamsha",8:"Ashtamsha",9:"Navamsha",10:"Dashamsha",11:"Rudramsha",12:"Dwadashamsha",16:"Shodashamsha",20:"Vimshamsha",24:"Siddhamsha",27:"Nakshatramsha",30:"Trimshamsha",40:"Khavedamsha",45:"Akshavedamsha",60:"Shashtiamsha",72:"Ashta-navamsha",81:"Nava-navamsha",108:"Ashtottaramsha",144:"Dwadash-dwadashamsha",150:"Nadi-amsha",300:"Ardha-nadi",1000:"Sahasramsha"}};
+// returns {s:0..11, deg} — rules identical to vedic-horo.ru for D1–D60, cyclic (parivritti) for others
+function varga(lon,n){const s=Math.floor(lon/30)%12,d=lon-30*s,odd=s%2===0,q=s%3,part=Math.floor(d*n/30),deg=(d*n)%30;let g;
+ switch(n){case 1:g=s;break;
+ case 2:g=odd?(d<15?4:3):(d<15?3:4);break;
+ case 3:g=s+4*part;break;case 4:g=s+3*part;break;
+ case 5:g=odd?[0,10,8,2,6][part]:[1,5,11,9,7][part];break;
+ case 7:g=odd?s+part:s+6+part;break;case 10:g=odd?s+part:s+8+part;break;
+ case 12:case 60:g=s+part;break;
+ case 16:case 45:g=[0,4,8][q]+part;break;case 20:g=[0,8,4][q]+part;break;
+ case 24:g=(odd?4:3)+part;break;case 40:g=(odd?0:6)+part;break;
+ case 30:g=odd?(d<5?0:d<10?10:d<18?8:d<25?2:6):(d<5?1:d<12?5:d<20?11:d<25?9:7);break;
+ default:g=Math.floor(lon*n/30)}
+ return {s:((g%12)+12)%12,deg}}
+const VV={ru:{vInTitle:"Данные рождения",vCal:"Календарь даты",vCalG:"Григорианский",vCalJ:"Юлианский",vDate:"Дата",vTime:"Время",vTz:"Часовой пояс",vLat:"Широта °  ′",vLon:"Долгота °  ′",vCalc:"Построить карту",
+ vChartsTitle:"Карты · D1 – D1000",vChartNote:"Северный стиль: дом 1 — верхний ромб, дома идут против часовой. Число в доме — номер знака. Можно выбрать любую варгу из списка или ввести свою Dn от 1 до 1000.",
+ vPlTitle:"Положение планет",vVargTitle:"Все дробные карты",vStd:"Классические D1–D60",vExt:"Расширенные D72–D1000",
+ vVargNote:"D1–D60 считаются по тем же правилам, что на vedic-horo.ru (Парашара). Карты выше D60 считаются циклическим методом (паривритти): знак = ⌊долгота × n / 30⌋ mod 12. Каждая доля D1000 — всего 1,8′: асцендент проходит её примерно за 7 секунд, поэтому карты выше D60 требуют точного до секунд времени рождения.",
+ vDashaTitle:"Вимшоттари-даша",vMethodTitle:"Методика расчёта",
+ hP:"Планета",hK:"Карака",hDeg:"Градусы",hR:"Раши",hN:"Навамша",hNak:"Накшатра (пада, упр.)",hRel:"Отношение",hH:"Дом",hL:"Управитель",
+ rel:{ex:"Экзальтация",db:"Дебилитация",mt:"Мулатрикона",own:"Свой знак",gf:"Большой друг",f:"Друг",n:"Нейтрально",e:"Враг",ge:"Большой враг"},lordOf:"",co:"Соупр.",hh:"-го",
+ moonC:"Лунная карта",sunC:"Солнечная карта",custom:"Своя Dn…",ayan:"Аянамша (Лахири)",jd:"Юлианский день",gdate:"Григ. дата",jdate:"Юл. дата",
+ md:"Махадаша",ad:"Антардаша",from:"с",to:"по",now:"сейчас",badIn:"Проверьте дату, время, пояс и координаты",
+ method:`<ol><li><b>Время.</b> Местное время переводится во всемирное (UT) по часовому поясу, затем в эфемеридное (с поправкой ΔT). Дату можно ввести по григорианскому или юлианскому календарю — момент на небе от этого не меняется, меняется только запись даты.</li>
+<li><b>Планеты.</b> Солнце и Луна — по алгоритмам Миуса (Луна — 60 членов теории ELP), планеты — орбитальные элементы с возмущениями Юпитера и Сатурна, поправка на время света, нутация. Точность — порядка 1′.</li>
+<li><b>Сидерический зодиак.</b> Аянамша Лахири, откалиброванная по vedic-horo.ru. Раху — истинный узел, Кету — точка напротив.</li>
+<li><b>Дома</b> — по целым знакам от асцендента, как на vedic-horo.ru. Караки — схема из 7 планет по градусу внутри знака.</li>
+<li><b>Дробные карты D1–D60</b> — по Парашаре, с теми же вариантами, что у vedic-horo.ru (D5 по схеме тримшамши равными долями, D6, D8, D11, D27 — циклически). <b>D72–D1000</b> — циклический метод паривритти.</li>
+<li><b>Вимшоттари-даша</b> — от положения Луны в накшатре, сидерический год = 365,2564 суток (как на vedic-horo.ru).</li></ol>
+<div class="warn">Широту и долготу вводите в градусах и минутах (например, 51°30′). Летнее время учитывайте в часовом поясе.</div>`},
+ en:{vInTitle:"Birth data",vCal:"Date calendar",vCalG:"Gregorian",vCalJ:"Julian",vDate:"Date",vTime:"Time",vTz:"Time zone",vLat:"Latitude °  ′",vLon:"Longitude °  ′",vCalc:"Build chart",
+ vChartsTitle:"Charts · D1 – D1000",vChartNote:"North Indian style: house 1 is the top diamond, houses run counter-clockwise. The number in each house is the sign. Pick any varga or enter your own Dn from 1 to 1000.",
+ vPlTitle:"Planetary positions",vVargTitle:"All divisional charts",vStd:"Classical D1–D60",vExt:"Extended D72–D1000",
+ vVargNote:"D1–D60 use the same rules as vedic-horo.ru (Parashara). Charts above D60 use the cyclic (parivritti) method: sign = ⌊longitude × n / 30⌋ mod 12. One D1000 division is only 1.8′ — the ascendant crosses it in about 7 seconds, so charts above D60 need a birth time accurate to the second.",
+ vDashaTitle:"Vimshottari dasha",vMethodTitle:"Calculation method",
+ hP:"Planet",hK:"Karaka",hDeg:"Degrees",hR:"Rashi",hN:"Navamsha",hNak:"Nakshatra (pada, lord)",hRel:"Relation",hH:"House",hL:"Lord of",
+ rel:{ex:"Exaltation",db:"Debilitation",mt:"Moolatrikona",own:"Own sign",gf:"Great friend",f:"Friend",n:"Neutral",e:"Enemy",ge:"Great enemy"},lordOf:"",co:"co-lord",hh:"",
+ moonC:"Moon chart",sunC:"Sun chart",custom:"Custom Dn…",ayan:"Ayanamsa (Lahiri)",jd:"Julian Day",gdate:"Greg. date",jdate:"Jul. date",
+ md:"Mahadasha",ad:"Antardasha",from:"from",to:"to",now:"now",badIn:"Check the date, time, zone and coordinates",
+ method:`<ol><li><b>Time.</b> Local time is converted to UT using the time zone, then to ephemeris time (ΔT). The date may be entered in the Gregorian or Julian calendar — the moment in the sky stays the same, only the date label changes.</li>
+<li><b>Planets.</b> Sun and Moon by Meeus (Moon — 60 terms of ELP theory), planets by orbital elements with Jupiter–Saturn perturbations, light-time and nutation. Accuracy about 1′.</li>
+<li><b>Sidereal zodiac.</b> Lahiri ayanamsa calibrated to vedic-horo.ru. Rahu is the true node, Ketu the opposite point.</li>
+<li><b>Houses</b> are whole signs from the ascendant, as on vedic-horo.ru. Karakas use the 7-planet scheme by degree within the sign.</li>
+<li><b>Divisional charts D1–D60</b> follow Parashara with the same variants as vedic-horo.ru (D5 as equal-part trimshamsha scheme, D6, D8, D11, D27 cyclic). <b>D72–D1000</b> use the cyclic parivritti method.</li>
+<li><b>Vimshottari dasha</b> from the Moon's nakshatra, sidereal year = 365.2564 days (as on vedic-horo.ru).</li></ol>
+<div class="warn">Enter latitude and longitude in degrees and minutes (e.g. 51°30′). Include daylight saving in the time zone.</div>`}};
+let VR=null,VGRP='std';
+const $v=id=>document.getElementById(id);
+const fdm=x=>{const d=Math.floor(x),mf=(x-d)*60,m=Math.floor(mf),s=Math.floor((mf-m)*60);return `${String(d).padStart(2,"0")}°${String(m).padStart(2,"0")}′${String(s).padStart(2,"0")}″`};
+const fdate=jd=>{const c=V.calOf(jd);return `${String(c.d).padStart(2,"0")}.${String(c.m).padStart(2,"0")}.${c.y}`};
+function vParse(){
+ const dm=$v("vdate").value.trim().match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](-?\d{1,4})$/),tm=$v("vtime").value.trim().match(/^(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?$/),
+  tz=$v("vtz").value.trim().replace(",",".").match(/^([+-]?)(\d{1,2})(?:[:.](\d{1,2}))?$/);
+ if(!dm||!tm||!tz)return null;
+ const d=+dm[1],m=+dm[2],y=+dm[3],h=+tm[1],mi=+tm[2],se=+(tm[3]||0);
+ let tzv;{const sg=tz[1]==="-"?-1:1,hh=+tz[2],rest=tz[3];tzv=sg*(hh+(rest===undefined?0:($v("vtz").value.includes(":")?+rest/60:+("0."+rest))))}
+ const lat=(+$v("vlatd").value+(+$v("vlatm").value)/60)*($v("vlats").value==="S"?-1:1),lon=(+$v("vlond").value+(+$v("vlonm").value)/60)*($v("vlons").value==="W"?-1:1);
+ if(m<1||m>12||d<1||d>31||h>23||mi>59||se>59||Math.abs(lat)>=90||Math.abs(lon)>180||isNaN(lat)||isNaN(lon))return null;
+ const jul=$v("vcal").value==="j";const jd=V.jdOf(y,m,d,h+mi/60+se/3600-tzv,jul);
+ return {jd,lat,lon,jul,tz:tzv}}
+function vCalc(){const p=vParse();$v("verr").textContent="";if(!p){$v("verr").textContent=VV[L].badIn;$v("vout").hidden=true;return}
+ const pos=V.positions(p.jd,p.lat,p.lon),pre=V.positions(p.jd-0.5,p.lat,p.lon),post=V.positions(p.jd+0.5,p.lat,p.lon);
+ const retro={};for(const k of ['Ma','Me','Ju','Ve','Sa']){let dl=post[k]-pre[k];if(dl>180)dl-=360;if(dl<-180)dl+=360;retro[k]=dl<0}retro.Ra=retro.Ke=true;
+ VR={p,pos,retro};vRender()}
+function rel(pl,lon,pos){const s=Math.floor(lon/30),d=lon%30;
+ if(EXA[pl]){if(EXA[pl][0]===s)return ['ex',Math.ceil(Math.abs(d-EXA[pl][1]))||1];if((EXA[pl][0]+6)%12===s)return ['db',Math.ceil(Math.abs(d-EXA[pl][1]))||1];
+  const mt=MOOL[pl];if(mt[0]===s&&d>=mt[1]&&d<mt[2])return ['mt'];if(SLORD[s]===pl)return ['own']}
+ const lord=SLORD[s];if(lord===pl)return ['own'];
+ const nat=NAT[pl].f.includes(lord)?1:NAT[pl].e.includes(lord)?-1:0;
+ const dist=((Math.floor(pos[lord]/30)-s+12)%12)+1,tmp=[2,3,4,10,11,12].includes(dist)?1:-1,sum=nat+tmp;
+ return [sum===2?'gf':sum===1?'f':sum===0?'n':sum===-1?'e':'ge']}
+function northChart(sel,n,lagnaSign){
+ const {pos,retro}=VR,P=VPA[L];const W=330,C=165;
+ const H=[[[165,0],[247.5,82.5],[165,165],[82.5,82.5]],[[165,0],[82.5,82.5],[0,0]],[[0,0],[82.5,82.5],[0,165]],[[82.5,82.5],[165,165],[82.5,247.5],[0,165]],[[0,165],[82.5,247.5],[0,330]],[[82.5,247.5],[165,330],[0,330]],[[165,165],[247.5,247.5],[165,330],[82.5,247.5]],[[247.5,247.5],[330,330],[165,330]],[[330,165],[330,330],[247.5,247.5]],[[247.5,82.5],[330,165],[247.5,247.5],[165,165]],[[330,0],[330,165],[247.5,82.5]],[[165,0],[330,0],[247.5,82.5]]];
+ const vs={};for(const k of VP)vs[k]=varga(pos[k],n);
+ const asc=lagnaSign!=null?lagnaSign:vs.As.s;
+ let s=`<svg viewBox="-2 -2 334 334" class="nchart"><rect x="0" y="0" width="330" height="330" fill="#050505" stroke="#2a2a2a"/>`;
+ s+=`<path d="M0 0L330 330M330 0L0 330M165 0L330 165L165 330L0 165Z" stroke="#2a2a2a" fill="none"/>`;
+ H.forEach((poly,i)=>{const sign=(asc+i)%12,cx=poly.reduce((a,p)=>a+p[0],0)/poly.length,cy=poly.reduce((a,p)=>a+p[1],0)/poly.length;
+  const inner=poly.reduce((b,p)=>Math.hypot(p[0]-C,p[1]-C)<Math.hypot(b[0]-C,b[1]-C)?p:b);const sx=cx+0.62*(inner[0]-cx),sy=cy+0.62*(inner[1]-cy);
+  s+=`<text x="${sx}" y="${sy+4}" text-anchor="middle" font-size="11" fill="#666">${sign+1}</text>`;
+  const here=VP.filter(k=>vs[k].s===sign&&!(k==='As'&&lagnaSign!=null&&false));const big=poly.length===4,vert=[2,4,8,10].includes(i);const per=big?3:vert?1:3,lh=vert?25:26;
+  const rows=[];for(let j=0;j<here.length;j+=per)rows.push(here.slice(j,j+per));
+  const oy=cy-(rows.length-1)*lh/2-(big?6:0)+(vert?0:(i===1||i===11?-10:i===5||i===7?8:0));
+  rows.forEach((r,ri)=>{const sp=big?40:34,w=r.length*sp;r.forEach((k,ci)=>{const x=cx-w/2+sp/2+ci*sp,y=oy+ri*lh;const col=k==='As'?'#e3122d':'#ececec';
+   s+=`<text x="${x}" y="${y}" text-anchor="middle" font-size="12.5" fill="${col}" font-weight="600">${P[k]}${retro[k]&&k!=='As'?'<tspan font-size="8" fill="#e3122d" dy="-5">R</tspan>':''}</text><text x="${x}" y="${y+(retro[k]&&k!=='As'?14:9)}" text-anchor="middle" font-size="8.5" fill="#808080">${String(Math.floor(vs[k].deg)).padStart(2,"0")}°</text>`})});
+ });
+ return s+"</svg>"}
+function vOpts(){const o=[`<option value="mo">${VV[L].moonC}</option>`,`<option value="su">${VV[L].sunC}</option>`];
+ for(const n of [...STD,...EXT])o.push(`<option value="${n}">D${n}${VNAME[L][n]?" · "+VNAME[L][n]:""}</option>`);o.push(`<option value="c">${VV[L].custom}</option>`);return o.join("")}
+function drawSel(i){const sel=$v("vsel"+i),c=$v("vcust"+i);c.style.display=sel.value==="c"?"inline-block":"none";
+ let n=1,lag=null;if(sel.value==="mo"){lag=Math.floor(VR.pos.Mo/30)}else if(sel.value==="su"){lag=Math.floor(VR.pos.Su/30)}else if(sel.value==="c"){n=Math.max(1,Math.min(1000,+c.value||1))}else n=+sel.value;
+ const title=sel.value==="c"?`D${n}`:"";$v("vchart"+i).innerHTML=(title?`<div class="small" style="text-align:center">${title}</div>`:"")+northChart(sel,n,lag)}
+function vRender(){if(!VR)return;const {p,pos,retro}=VR,T=VV[L];
+ const c=V.calOf(p.jd);
+ $v("vbase").innerHTML=`<div>${T.ayan}: <b>${fdm(pos.ay)}</b></div><div>${T.jd}: <b>${p.jd.toFixed(5)}</b></div><div>UT: <b>${fdate(p.jd)} ${String(Math.floor(((p.jd+0.5)%1)*24)).padStart(2,"0")}:${String(Math.floor(((p.jd+0.5)%1)*1440)%60).padStart(2,"0")}</b></div>`;
+ // table
+ const kr=['Su','Mo','Ma','Me','Ju','Ve','Sa'].sort((a,b)=>(pos[b]%30)-(pos[a]%30));const kar={};kr.forEach((k,i)=>kar[k]=KAR[L][i]);
+ const asS=Math.floor(pos.As/30);
+ let h=`<tr><th>${T.hP}</th><th>${T.hK}</th><th>${T.hDeg}</th><th>${T.hR}</th><th>${T.hN}</th><th>${T.hNak}</th><th>${T.hRel}</th><th>${T.hH}</th><th>${T.hL}</th></tr>`;
+ for(const k of VP){const lon=pos[k],s=Math.floor(lon/30),nk=Math.floor(lon/(40/3)),pada=Math.floor((lon%(40/3))/(10/3))+1;
+  let r="-",hs="-",lo="-";
+  if(k!=='As'){const rr=rel(k,lon,pos);r=T.rel[rr[0]]+(rr[1]?`, ${rr[1]}°`:"");hs=((s-asS+12)%12)+1;
+   if(k==='Ra')lo=`${T.co} ${((10-asS+12)%12)+1}${T.hh}`;else if(k==='Ke')lo=`${T.co} ${((7-asS+12)%12)+1}${T.hh}`;
+   else lo=SLORD.map((l,i)=>l===k?((i-asS+12)%12)+1:0).filter(Boolean).sort((a,b)=>a-b).map(x=>x+T.hh).join(", ")}
+  h+=`<tr${k==='As'?' class="as"':''}><td><b>${VPN[L][k]}</b>${retro[k]&&k!=='As'?' <span class="rr">R</span>':''}</td><td>${kar[k]||"-"}</td><td class="mono">${fdm(lon%30)}</td><td>${SIGN[L][s]}</td><td>${SIGN[L][varga(lon,9).s]}</td><td>${NAK[L][nk]} (${pada}, ${VPA[L][DLORD[nk%9]]})</td><td>${r}</td><td>${hs}</td><td>${lo}</td></tr>`}
+ $v("vtab").innerHTML=h;
+ // charts
+ for(const i of [1,2])drawSel(i);
+ // varga table
+ $v("vgroups").innerHTML=`<button class="${VGRP==='std'?'on':''}" data-g="std">${T.vStd}</button><button class="${VGRP==='ext'?'on':''}" data-g="ext">${T.vExt}</button>`;
+ $v("vgroups").querySelectorAll("button").forEach(b=>b.onclick=()=>{VGRP=b.dataset.g;vRender()});
+ const L2=VGRP==='std'?STD:EXT;let vt=`<tr><th></th>${L2.map(n=>`<th>D${n}</th>`).join("")}</tr>`;
+ for(const k of VP)vt+=`<tr${k==='As'?' class="as"':''}><td><b>${VPA[L][k]}</b></td>${L2.map(n=>{const v=varga(pos[k],n);return `<td title="${SIGN[L][v.s]} ${v.deg.toFixed(2)}°"><span class="sg">${v.s+1}</span><span class="dg">${Math.floor(v.deg)}°</span></td>`}).join("")}</tr>`;
+ $v("vvarg").innerHTML=vt;
+ // dasha
+ const mo=pos.Mo,nk=Math.floor(mo/(40/3)),fr=(mo%(40/3))/(40/3),l0=nk%9,Y=365.256363;
+ let start=p.jd-fr*DYRS[DLORD[l0]]*Y,dh="";const now=V.jdOf(new Date().getUTCFullYear(),new Date().getUTCMonth()+1,new Date().getUTCDate(),12,false);
+ for(let i=0;i<9;i++){const lord=DLORD[(l0+i)%9],len=DYRS[lord]*Y,end=start+len,cur=now>=start&&now<end;
+  let ad="",as=start;for(let j=0;j<9;j++){const l2=DLORD[(l0+i+j)%9],ln=len*DYRS[l2]/120,ae=as+ln,c2=now>=as&&now<ae;ad+=`<div class="ad${c2?' cur':''}"><span>${VPN[L][lord]} / ${VPN[L][l2]}</span><span class="mono">${fdate(as)} — ${fdate(ae)}</span></div>`;as=ae}
+  dh+=`<details${cur?' open':''}><summary><span class="ball" style="background:${cur?'#e3122d':'#1a1a1a'};border:1px solid #333">${DYRS[lord]}</span><span>${VPN[L][lord]}</span><span class="mono small" style="margin-left:auto">${fdate(start)} — ${fdate(end)}${cur?' · '+T.now:''}</span></summary><div class="body">${ad}</div></details>`;start=end}
+ $v("vdasha").innerHTML=dh;
+ $v("vout").hidden=false}
+function vApplyLang(){document.querySelectorAll("[data-v]").forEach(el=>el.textContent=VV[L][el.dataset.v]);
+ $v("vcal").options[0].textContent=VV[L].vCalG;$v("vcal").options[1].textContent=VV[L].vCalJ;
+ for(const i of [1,2]){const s=$v("vsel"+i),v=s.value||(i===1?"1":"9");s.innerHTML=vOpts();s.value=v}
+ $v("vmethod").innerHTML=VV[L].method;vRender()}
+for(const i of [1,2]){$v("vsel"+i).onchange=()=>VR&&drawSel(i);$v("vcust"+i).oninput=()=>VR&&drawSel(i)}
+$v("vgo").onclick=vCalc;
+
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));$("tab-arc").hidden=b.dataset.tab!=="arc";$("tab-ved").hidden=b.dataset.tab!=="ved";try{localStorage.setItem("arcTab",b.dataset.tab)}catch(e){}});
+try{const t=localStorage.getItem("arcTab");if(t==="ved")document.querySelector('.tabs button[data-tab=ved]').click()}catch(e){}
+vApplyLang();vCalc();
+</script>
+</body>
+</html>
